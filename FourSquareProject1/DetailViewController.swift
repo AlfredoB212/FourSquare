@@ -8,10 +8,12 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-
+class DetailViewController: UIViewController {
+    var detailViewSetup = DetailViewSetup()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addSubview(detailViewSetup)
         // Do any additional setup after loading the view, typically from a nib.
     }
 
