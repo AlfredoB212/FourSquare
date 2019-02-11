@@ -16,11 +16,10 @@
 		75A39C502211DF4200DB1532 /* VenueModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A39C4F2211DF4200DB1532 /* VenueModel.swift */; };
 		75A39C522211DF8400DB1532 /* PhotoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A39C512211DF8400DB1532 /* PhotoModel.swift */; };
 		75A39C542211DFB000DB1532 /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A39C532211DFB000DB1532 /* CollectionViewController.swift */; };
-		75A39C562211E9D200DB1532 /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A39C552211E9D200DB1532 /* AppError.swift */; };
-		75A39C582211EA0C00DB1532 /* ImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A39C572211EA0C00DB1532 /* ImageHelper.swift */; };
-		75A39C5A2211EA4C00DB1532 /* NetworkHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A39C592211EA4C00DB1532 /* NetworkHelper.swift */; };
-		75A39C5C2211EA8100DB1532 /* DataPersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A39C5B2211EA8100DB1532 /* DataPersistenceManager.swift */; };
 		961A2E8D2211DEE8001A95E6 /* DetailViewSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 961A2E8C2211DEE8001A95E6 /* DetailViewSetup.swift */; };
+		9665C3A722121BB7000E61C6 /* ImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9665C3A522121BB6000E61C6 /* ImageHelper.swift */; };
+		9665C3A822121BB7000E61C6 /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9665C3A622121BB7000E61C6 /* AppError.swift */; };
+		9665C3A922121C22000E61C6 /* NetworkHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A39C592211EA4C00DB1532 /* NetworkHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,11 +55,11 @@
 		75A39C4F2211DF4200DB1532 /* VenueModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueModel.swift; sourceTree = "<group>"; };
 		75A39C512211DF8400DB1532 /* PhotoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModel.swift; sourceTree = "<group>"; };
 		75A39C532211DFB000DB1532 /* CollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
-		75A39C552211E9D200DB1532 /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
-		75A39C572211EA0C00DB1532 /* ImageHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageHelper.swift; sourceTree = "<group>"; };
 		75A39C592211EA4C00DB1532 /* NetworkHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkHelper.swift; sourceTree = "<group>"; };
 		75A39C5B2211EA8100DB1532 /* DataPersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataPersistenceManager.swift; sourceTree = "<group>"; };
 		961A2E8C2211DEE8001A95E6 /* DetailViewSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewSetup.swift; sourceTree = "<group>"; };
+		9665C3A522121BB6000E61C6 /* ImageHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageHelper.swift; sourceTree = "<group>"; };
+		9665C3A622121BB7000E61C6 /* AppError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,17 +110,13 @@
 		753D8991220DF6550051F0EC /* FourSquareProject1 */ = {
 			isa = PBXGroup;
 			children = (
-				753D8994220DF6550051F0EC /* DetailViewController.swift */,
 				961A2E8C2211DEE8001A95E6 /* DetailViewSetup.swift */,
-				753D8994220DF6550051F0EC /* ViewController.swift */,
+				753D8994220DF6550051F0EC /* DetailViewController.swift */,
 				75A39C4F2211DF4200DB1532 /* VenueModel.swift */,
 				75A39C512211DF8400DB1532 /* PhotoModel.swift */,
 				75A39C532211DFB000DB1532 /* CollectionViewController.swift */,
-				753D8996220DF6550051F0EC /* Main.storyboard */,
-				753D89C0220DFBE60051F0EC /* NetworkHelper.swift */,
-				753D89C2220DFC800051F0EC /* ImageHelper.swift */,
-				753D89C6220DFDA70051F0EC /* DataPersistenceManager.swift */,
-				753D89C4220DFD350051F0EC /* AppError.swift */,
+				9665C3A622121BB7000E61C6 /* AppError.swift */,
+				9665C3A522121BB6000E61C6 /* ImageHelper.swift */,
 				753D8999220DF6560051F0EC /* Assets.xcassets */,
 				753D899B220DF6560051F0EC /* LaunchScreen.storyboard */,
 				753D8992220DF6550051F0EC /* AppDelegate.swift */,
@@ -282,15 +277,14 @@
 			files = (
 				753D8995220DF6550051F0EC /* DetailViewController.swift in Sources */,
 				75A39C502211DF4200DB1532 /* VenueModel.swift in Sources */,
-				753D8995220DF6550051F0EC /* ViewController.swift in Sources */,
+				9665C3A922121C22000E61C6 /* NetworkHelper.swift in Sources */,
+				9665C3A822121BB7000E61C6 /* AppError.swift in Sources */,
+				753D8995220DF6550051F0EC /* DetailViewController.swift in Sources */,
 				75A39C522211DF8400DB1532 /* PhotoModel.swift in Sources */,
 				75A39C542211DFB000DB1532 /* CollectionViewController.swift in Sources */,
-				753D89C1220DFBE60051F0EC /* NetworkHelper.swift in Sources */,
-				753D89C5220DFD350051F0EC /* AppError.swift in Sources */,
-				753D89C7220DFDA70051F0EC /* DataPersistenceManager.swift in Sources */,
 				961A2E8D2211DEE8001A95E6 /* DetailViewSetup.swift in Sources */,
 				753D8993220DF6550051F0EC /* AppDelegate.swift in Sources */,
-				753D89C3220DFC800051F0EC /* ImageHelper.swift in Sources */,
+				9665C3A722121BB7000E61C6 /* ImageHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -458,7 +452,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = L2ZBQQ329G;
+				DEVELOPMENT_TEAM = 9P5SSDN939;
 				INFOPLIST_FILE = FourSquareProject1/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -476,7 +470,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = L2ZBQQ329G;
+				DEVELOPMENT_TEAM = 9P5SSDN939;
 				INFOPLIST_FILE = FourSquareProject1/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
