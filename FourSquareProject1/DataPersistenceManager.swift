@@ -2,7 +2,11 @@
 //  DataPersistenceManager.swift
 //  FourSquareProject1
 //
+<<<<<<< HEAD
 //  Created by Alfredo Barragan on 2/11/19.
+=======
+//  Created by Alfredo Barragan on 2/8/19.
+>>>>>>> 13900dbe1a78505b10b2ccc8df4ac59d42af8f32
 //  Copyright © 2019 Alfredo Barragan. All rights reserved.
 //
 
