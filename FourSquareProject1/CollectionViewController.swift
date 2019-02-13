@@ -8,7 +8,18 @@
 
 import UIKit
 
-class CollectionViewController: UIViewController {
+class CollectionViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "collectionViewCellID", for: indexPath) as! collectionViewCell
+        return cell
+    }
+    
+    
+    let collectionViewCellID = "collectionViewCellID"
     
     lazy var myCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -23,12 +34,18 @@ class CollectionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(myCollectionView)
-        setConstraints()
+        setupViews()
         
     }
     
     
-    func setConstraints() {
+    func setupViews() {
+        myCollectionView.delegate = self
+        myCollectionView.dataSource = self
+        
+        view.addSubview(myCollectionView)
+    
+        
         myCollectionView.translatesAutoresizingMaskIntoConstraints = false
         myCollectionView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
         myCollectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
@@ -37,4 +54,16 @@ class CollectionViewController: UIViewController {
         
     }
     
+    class collectionViewCell: UICollectionViewCell {
+        override init(frame: CGRect) {
+            super.init(frame: frame)
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+    }
+
+
 }
