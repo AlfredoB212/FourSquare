@@ -47,7 +47,7 @@ class DetailViewSetup: UIView {
     lazy var direction: UIButton = {
         let button = UIButton()
         
-        button.backgroundColor = .black
+        button.backgroundColor = .green
         button.titleLabel?.textColor = .white
         button.setTitle("Direction", for: .normal)
         
@@ -62,6 +62,13 @@ class DetailViewSetup: UIView {
         
         return textField
     }()
+    
+    lazy var saveButton: UIButton = {
+        var button = UIButton()
+        button.setTitle("Save", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        return button
+    }()
 
     
     
@@ -72,6 +79,11 @@ class DetailViewSetup: UIView {
         addressLayout()
         directionLayout()
         tipLayout()
+        saveButtonLayout()
+    }
+    func saveButtonLayout(){
+        addSubview(saveButton)
+        
     }
     
     func pictureLayout(){
