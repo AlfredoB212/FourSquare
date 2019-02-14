@@ -10,7 +10,7 @@ import UIKit
 
 class VenuesViewController: UIViewController {
     private lazy var venuesView = VenueCollection()
-    private var venues = [Venues]()
+    private var venues = SavingManager.loadingEntry()
     override func viewDidLoad() {
         super.viewDidLoad()
         setupDelegates()
@@ -28,11 +28,12 @@ extension VenuesViewController: UICollectionViewDataSource {
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     guard let cell = venuesView.venueCollection.dequeueReusableCell(withReuseIdentifier: "VenueCell", for: indexPath) as? VenueCell else { fatalError("") }
     cell.configureCell()
+    cell.deleteButton.tag = indexPath.row
     return cell
   }
   
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return 5
+    return venues.count
   }
 }
 
