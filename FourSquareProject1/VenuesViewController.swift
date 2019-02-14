@@ -9,25 +9,47 @@
 import UIKit
 
 class VenuesViewController: UIViewController {
-    private lazy var venuesView = VenueCollection()
-    private var venues = SavingManager.loadingEntry()
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupDelegates()
-        view.addSubview(venuesView)
+  private lazy var venuesView = VenueCollection()
+  private var venues = [SaveModel]() {
+    didSet {
+      venuesView.venueCollection.reloadData()
     }
+  }
+  
+  
+  override func viewWillAppear(_ animated: Bool) {
+    fetchVenues()
+  }
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    setupDelegates()
+    SavingManager.savingEntry()
+    view.addSubview(venuesView)
+  }
   
   private func setupDelegates(){
     venuesView.venueCollection.delegate = self
     venuesView.venueCollection.dataSource = self
   }
-
+  
+  private func fetchVenues() {
+    venues = SavingManager.loadingEntry()
+  }
+  
+  @objc private func deleteVenue(sender:UIButton){
+    let deleteIndex = sender.tag
+    SavingManager.removing(index: deleteIndex)
+    fetchVenues()
+  }
+  
+  
 }
 
 extension VenuesViewController: UICollectionViewDataSource {
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     guard let cell = venuesView.venueCollection.dequeueReusableCell(withReuseIdentifier: "VenueCell", for: indexPath) as? VenueCell else { fatalError("") }
-    cell.configureCell()
+    let venue = venues[indexPath.row]
+    cell.configureCell(venue:venue,selector: #selector(deleteVenue(sender:)), target: self)
     cell.deleteButton.tag = indexPath.row
     return cell
   }
@@ -40,6 +62,6 @@ extension VenuesViewController: UICollectionViewDataSource {
 extension VenuesViewController: UICollectionViewDelegateFlowLayout{
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
     return CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height
-      / 3)
+      / 2.5)
   }
 }
