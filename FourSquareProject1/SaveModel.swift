@@ -14,4 +14,5 @@ struct SaveModel: Codable {
     let address: String
     let latitude: Float
     let longitude: Float
+    let review: String
 }
