@@ -10,8 +10,8 @@ import Foundation
 
 final class VenueAPIClient {
     private init () {}
-    static func getVenuesList (long: Double, lat: Double, completionHandler: @escaping (AppError?, [Venues]?) -> Void) {
-        let endpointURLString = "https://api.foursquare.com/v2/venues/search?ll=\(long),\(lat)&client_id=\(APIKeys.clientID)&client_secret=\(APIKeys.clientSecret)&v=20190201"
+    static func getVenuesList (long: Double, lat: Double, query: String, completionHandler: @escaping (AppError?, [Venues]?) -> Void) {
+        let endpointURLString = "https://api.foursquare.com/v2/venues/search?ll=\(long),\(lat)&client_id=\(APIKeys.clientID)&client_secret=\(APIKeys.clientSecret)&v=20190201&query=\(query)"
         guard let url = URL(string: endpointURLString) else {
             completionHandler(AppError.badURL(endpointURLString), nil)
             return

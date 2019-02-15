@@ -10,8 +10,8 @@ import Foundation
 
 final class PhotoAPIClient {
     private init () {}
-    static func getPhoto (venueId: String, long: Double, lat: Double, completionHandler: @escaping (AppError?, [ItemInfo]?) -> Void) {
-        let endpointURLString = "https://api.foursquare.com/v2/venues/\(venueId)/photos?ll=\(long),\(lat)&client_id=\(APIKeys.clientID)&client_secret=\(APIKeys.clientSecret)&v=20190201"
+    static func getPhoto (venueId: String, completionHandler: @escaping (AppError?, [ItemInfo]?) -> Void) {
+        let endpointURLString = "https://api.foursquare.com/v2/venues/\(venueId)/photos?client_id=\(APIKeys.clientID)&client_secret=\(APIKeys.clientSecret)&v=20190201"
         guard let url = URL(string: endpointURLString) else {
             completionHandler(AppError.badURL(endpointURLString), nil)
             return
