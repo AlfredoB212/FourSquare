@@ -15,6 +15,7 @@ class SearchViewController: UIViewController {
     let searchView = SearchView()
     var long = 40.7
     var lat = -74.0
+    var query = "pizza"
     
     var venues = [Venues]() {
         didSet {
@@ -36,7 +37,7 @@ class SearchViewController: UIViewController {
     }
     
     func getVenues() {
-        VenueAPIClient.getVenuesList(long: long, lat: lat) { (error, data) in
+        VenueAPIClient.getVenuesList(long: long, lat: lat, query: query) { (error, data) in
             if let error = error {
                 print(error.errorMessage())
             } else if let data = data {
@@ -54,27 +55,24 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = searchView.venueTableView.dequeueReusableCell(withIdentifier: "VenueTableList", for: indexPath) as? VenueTableViewCell else {return UITableViewCell()}
         let cellToSet = venues[indexPath.row]
-//        PhotoAPIClient.getPhoto(venueId: cellToSet.id, long: cellToSet.location.lng!, lat: cellToSet.location.lat!) { (error, data) in
-//            DispatchQueue.main.async {
-//
-//
-//            if let error = error {
-//                print(error.errorMessage())
-//            } else if let data = data {
-//                let prefix = data[0].prefix
-//                let suffix = data[0].suffix.replacingOccurrences(of: "/", with: "")
-//                let urlString = prefix + suffix
-//                let fixedString1 = urlString.replacingOccurrences(of: "img/", with: "")
-//                ImageHelper.fetchImageFromNetwork(urlString: fixedString1, completion: { (error, image) in
-//                    if let error = error {
-//                        print(error.errorMessage())
-//                    } else if let image = image {
-//                        cell.venueImage.image = image
-//                    }
-//                })
-//            }
-//            }
-//        }
+        PhotoAPIClient.getPhoto(venueId: cellToSet.id) { (error, data) in
+            DispatchQueue.main.async {
+            if let error = error {
+                print(error.errorMessage())
+            } else if let data = data {
+                let prefix = data[0].prefix
+                let suffix = data[0].suffix
+                let urlString = prefix + "original" + suffix
+                ImageHelper.fetchImageFromNetwork(urlString: urlString, completion: { (error, image) in
+                    if let error = error {
+                        print(error.errorMessage())
+                    } else if let image = image {
+                        cell.venueImage.image = image
+                    }
+                })
+            }
+            }
+        }
         cell.venueNameLabel.text = cellToSet.name
         return cell
     }
@@ -83,5 +81,8 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
         return 100
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+    }
     
 }
