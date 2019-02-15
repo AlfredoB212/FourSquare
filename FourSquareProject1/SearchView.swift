@@ -49,6 +49,7 @@ class SearchView: UIView {
     
     private func commonInit() {
         backgroundColor = .white
+        self.venueTableView.register(VenueTableViewCell.self, forCellReuseIdentifier: "VenueTableList")
         setupView()
     }
 
