@@ -42,7 +42,6 @@ class SearchViewController: UIViewController {
         searchView.venueTableView.delegate = self
         searchView.venueSearchBar.delegate = self
         setupCLManager()
-        //getVenues()
     }
   
     func setupCLManager(){
@@ -141,15 +140,10 @@ extension SearchViewController: CLLocationManagerDelegate {
 
   
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-    
     guard let location = locations.last else {
       print("no locations found")
       return
     }
     currentLocation = location
-    
-//    guard let newestLocation = locations.last else { return }
-    //currentLocation = newestLocation
-    //getVenues()
   }
 }
