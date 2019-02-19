@@ -82,7 +82,10 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        let venue = venues[indexPath.row]
+        let detailVC = DetailViewController()
+        detailVC.venue = venue
+        navigationController?.pushViewController(detailVC, animated: true)
     }
     
 }
