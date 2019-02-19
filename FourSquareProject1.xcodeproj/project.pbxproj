@@ -10,6 +10,10 @@
 		090568C522122B43005B4E92 /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090568C222122B43005B4E92 /* AppError.swift */; };
 		090568C622122B43005B4E92 /* NetworkHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090568C322122B43005B4E92 /* NetworkHelper.swift */; };
 		090568C722122B43005B4E92 /* ImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090568C422122B43005B4E92 /* ImageHelper.swift */; };
+		099596642213782B00DBBFA6 /* VenueAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099596632213782B00DBBFA6 /* VenueAPIClient.swift */; };
+		0995966622137A2100DBBFA6 /* SecretKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0995966522137A2100DBBFA6 /* SecretKeys.swift */; };
+		099596682213815000DBBFA6 /* VenueTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099596672213815000DBBFA6 /* VenueTableViewCell.swift */; };
+		099596702214C95A00DBBFA6 /* PhotoAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0995966F2214C95A00DBBFA6 /* PhotoAPIClient.swift */; };
 		09A20E662211DF70001E865A /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A20E652211DF70001E865A /* TabBarViewController.swift */; };
 		09A20E6A2211E053001E865A /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A20E692211E053001E865A /* SearchView.swift */; };
 		09A20E6C2211E09E001E865A /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A20E6B2211E09E001E865A /* SearchViewController.swift */; };
@@ -46,6 +50,10 @@
 		090568C222122B43005B4E92 /* AppError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
 		090568C322122B43005B4E92 /* NetworkHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkHelper.swift; sourceTree = "<group>"; };
 		090568C422122B43005B4E92 /* ImageHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageHelper.swift; sourceTree = "<group>"; };
+		099596632213782B00DBBFA6 /* VenueAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueAPIClient.swift; sourceTree = "<group>"; };
+		0995966522137A2100DBBFA6 /* SecretKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecretKeys.swift; sourceTree = "<group>"; };
+		099596672213815000DBBFA6 /* VenueTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueTableViewCell.swift; sourceTree = "<group>"; };
+		0995966F2214C95A00DBBFA6 /* PhotoAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAPIClient.swift; sourceTree = "<group>"; };
 		09A20E652211DF70001E865A /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		09A20E692211E053001E865A /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		09A20E6B2211E09E001E865A /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -133,6 +141,10 @@
 				09A20E6B2211E09E001E865A /* SearchViewController.swift */,
 				09A20E692211E053001E865A /* SearchView.swift */,
 				09A20E652211DF70001E865A /* TabBarViewController.swift */,
+				099596672213815000DBBFA6 /* VenueTableViewCell.swift */,
+				0995966F2214C95A00DBBFA6 /* PhotoAPIClient.swift */,
+				099596632213782B00DBBFA6 /* VenueAPIClient.swift */,
+				0995966522137A2100DBBFA6 /* SecretKeys.swift */,
 				961A2E8C2211DEE8001A95E6 /* DetailViewSetup.swift */,
 				753D8994220DF6550051F0EC /* DetailViewController.swift */,
 				75A39C4F2211DF4200DB1532 /* VenueModel.swift */,
@@ -303,12 +315,16 @@
 				75A39C502211DF4200DB1532 /* VenueModel.swift in Sources */,
 				090568C522122B43005B4E92 /* AppError.swift in Sources */,
 				090568C622122B43005B4E92 /* NetworkHelper.swift in Sources */,
+				099596642213782B00DBBFA6 /* VenueAPIClient.swift in Sources */,
 				753D8995220DF6550051F0EC /* DetailViewController.swift in Sources */,
+				099596682213815000DBBFA6 /* VenueTableViewCell.swift in Sources */,
 				75A39C522211DF8400DB1532 /* PhotoModel.swift in Sources */,
+				099596702214C95A00DBBFA6 /* PhotoAPIClient.swift in Sources */,
 				75A39C542211DFB000DB1532 /* CollectionViewController.swift in Sources */,
 				961A2E8D2211DEE8001A95E6 /* DetailViewSetup.swift in Sources */,
 				753D8993220DF6550051F0EC /* AppDelegate.swift in Sources */,
 				090568C722122B43005B4E92 /* ImageHelper.swift in Sources */,
+				0995966622137A2100DBBFA6 /* SecretKeys.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
