@@ -13,9 +13,11 @@ import MapKit
 class SearchViewController: UIViewController {
     
     let searchView = SearchView()
-    var long = 40.7
-    var lat = -74.0
-    var query = "pizza"
+    var query = "pizza" {
+      didSet {
+        getVenues()
+      }
+    }
     
     var venues = [Venues]() {
         didSet {
@@ -31,12 +33,16 @@ class SearchViewController: UIViewController {
         navigationItem.title = "Search"
         searchView.venueTableView.dataSource = self
         searchView.venueTableView.delegate = self
+        searchView.venueSearchBar.delegate = self
         getVenues()
 
         
     }
     
     func getVenues() {
+      let coordinate = searchView.venueMap.userLocation.coordinate
+      let lat = Double(coordinate.latitude)
+      let long = Double(coordinate.longitude)
         VenueAPIClient.getVenuesList(long: long, lat: lat, query: query) { (error, data) in
             if let error = error {
                 print(error.errorMessage())
@@ -88,4 +94,12 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
         navigationController?.pushViewController(detailVC, animated: true)
     }
     
+}
+
+extension SearchViewController: UISearchBarDelegate {
+  func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    if let searchTerm = searchBar.text {
+      query = searchTerm
+    }
+  }
 }
