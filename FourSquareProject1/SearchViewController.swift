@@ -145,5 +145,7 @@ extension SearchViewController: CLLocationManagerDelegate {
       return
     }
     currentLocation = location
+    let currentRegion = MKCoordinateRegion(center: currentLocation.coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+    searchView.venueMap.setRegion(currentRegion, animated: true)
   }
 }
