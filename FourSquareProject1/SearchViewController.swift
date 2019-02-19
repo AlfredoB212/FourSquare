@@ -27,6 +27,12 @@ class SearchViewController: UIViewController {
             }
         }
     }
+  var currentLocation: CLLocation! {
+    didSet {
+      getVenues()
+    }
+    
+  }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +42,7 @@ class SearchViewController: UIViewController {
         searchView.venueTableView.delegate = self
         searchView.venueSearchBar.delegate = self
         setupCLManager()
-        getVenues()
+        //getVenues()
     }
   
     func setupCLManager(){
@@ -56,7 +62,7 @@ class SearchViewController: UIViewController {
     
     
     func getVenues() {
-      let coordinate = searchView.venueMap.userLocation.coordinate
+      let coordinate = currentLocation.coordinate
       let lat = Double(coordinate.latitude)
       let long = Double(coordinate.longitude)
         VenueAPIClient.getVenuesList(long: long, lat: lat, query: query) { (error, data) in
@@ -132,7 +138,18 @@ extension SearchViewController: UISearchBarDelegate {
 }
 
 extension SearchViewController: CLLocationManagerDelegate {
+
+  
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-    getVenues()
+    
+    guard let location = locations.last else {
+      print("no locations found")
+      return
+    }
+    currentLocation = location
+    
+//    guard let newestLocation = locations.last else { return }
+    //currentLocation = newestLocation
+    //getVenues()
   }
 }
