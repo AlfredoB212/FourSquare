@@ -12,6 +12,7 @@ class DetailViewController: UIViewController {
     var detailViewSetup = DetailViewSetup()
     var venue: Venues?
     var location: String!
+    var picimage = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,10 +31,30 @@ class DetailViewController: UIViewController {
         detailViewSetup.saveButton.addTarget(self, action: #selector(saveCommand), for: .touchUpInside)
         detailViewSetup.nameOfLocation.text = "Name of place: \(venue?.name ?? "No Name")"
         detailViewSetup.direction.setTitle("Direction", for: .normal)
-        detailViewSetup.picture.image = UIImage(named: " ")
+        detailViewSetup.direction.addTarget(self, action: #selector(direction), for: .touchUpInside)
         
+        PhotoAPIClient.getPhoto(venueId: venue!.id) { (error, data) in
+            DispatchQueue.main.async {
+                if let error = error {
+                    print(error.errorMessage())
+                } else if let data = data {
+                    let prefix = data[0].prefix
+                    let suffix = data[0].suffix
+                    let urlString = prefix + "original" + suffix
+                    self.picimage = urlString
+                    self.detailViewSetup.picture.image = ImageHelper.fetchImageFromCache(urlString: urlString)
+        
+                }
+    
+            }
+        }
     }
     
+    @objc func direction(){
+        let directionVC = DirectionViewController()
+        directionVC.venue = venue
+        navigationController?.pushViewController(directionVC, animated: true)
+    }
 
     @objc func saveCommand(){
         if venue?.location.formattedAddress?.first != nil  && venue?.location.formattedAddress?[1] != nil {
@@ -48,7 +69,7 @@ class DetailViewController: UIViewController {
                 
                 present(alert, animated: true, completion: nil)
         }
-        let savemodel = SaveModel.init(picImage: ""/*Photo */, name: venue?.name ?? "No Name", address: location, latitude: Float(venue?.location.lat ?? 0.0), longitude: Float(venue?.location.lng ?? 0.0))
+        let savemodel = SaveModel.init(picImage: picimage, name: venue?.name ?? "No Name", address: location, latitude: Float(venue?.location.lat ?? 0.0), longitude: Float(venue?.location.lng ?? 0.0), review: "")
         print(savemodel)
         
         SavingManager.appening(type: savemodel)
