@@ -11,16 +11,19 @@ import CoreLocation
 import MapKit
 
 class SearchViewController: UIViewController {
-    
+    var locationManager: CLLocationManager!
     let searchView = SearchView()
-    var long = 40.7
-    var lat = -74.0
-    var query = "pizza"
-    
-    var venues = [Venues]() {
+    var query = "pizza" {
+      didSet {
+        getVenues()
+      }
+    }
+  var annotations = [MKAnnotation]()
+  var venues = [Venues]() {
         didSet {
             DispatchQueue.main.async {
                 self.searchView.venueTableView.reloadData()
+                self.makeAnnotations()
             }
         }
     }
@@ -31,12 +34,31 @@ class SearchViewController: UIViewController {
         navigationItem.title = "Search"
         searchView.venueTableView.dataSource = self
         searchView.venueTableView.delegate = self
+        searchView.venueSearchBar.delegate = self
+        setupCLManager()
         getVenues()
-
-        
     }
+  
+    func setupCLManager(){
+      locationManager = CLLocationManager()
+      locationManager.delegate = self
+      if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.startUpdatingLocation()
+        searchView.venueMap.showsUserLocation = true
+      } else {
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.startUpdatingLocation()
+        searchView.venueMap.showsUserLocation = true
+      }
+  }
+    
     
     func getVenues() {
+      let coordinate = searchView.venueMap.userLocation.coordinate
+      let lat = Double(coordinate.latitude)
+      let long = Double(coordinate.longitude)
         VenueAPIClient.getVenuesList(long: long, lat: lat, query: query) { (error, data) in
             if let error = error {
                 print(error.errorMessage())
@@ -44,6 +66,17 @@ class SearchViewController: UIViewController {
                 self.venues = data
             }
         }
+    }
+  
+    func makeAnnotations(){
+      searchView.venueMap.removeAnnotations(annotations)
+      for venue in venues {
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = venue.coordinate
+        annotation.title = venue.name
+        annotations.append(annotation)
+      }
+      searchView.venueMap.addAnnotations(annotations)
     }
     
 }
@@ -88,4 +121,18 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
         navigationController?.pushViewController(detailVC, animated: true)
     }
     
+}
+
+extension SearchViewController: UISearchBarDelegate {
+  func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    if let searchTerm = searchBar.text {
+      query = searchTerm
+    }
+  }
+}
+
+extension SearchViewController: CLLocationManagerDelegate {
+  func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    getVenues()
+  }
 }
