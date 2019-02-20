@@ -11,19 +11,28 @@ import CoreLocation
 import MapKit
 
 class SearchViewController: UIViewController {
-    
+    var locationManager: CLLocationManager!
     let searchView = SearchView()
-    var long = 40.7
-    var lat = -74.0
-    var query = "pizza"
-    
-    var venues = [Venues]() {
+    var query = "pizza" {
+      didSet {
+        getVenues()
+      }
+    }
+  var annotations = [MKAnnotation]()
+  var venues = [Venues]() {
         didSet {
             DispatchQueue.main.async {
                 self.searchView.venueTableView.reloadData()
+                self.makeAnnotations()
             }
         }
     }
+  var currentLocation: CLLocation! {
+    didSet {
+      getVenues()
+    }
+    
+  }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,12 +40,30 @@ class SearchViewController: UIViewController {
         navigationItem.title = "Search"
         searchView.venueTableView.dataSource = self
         searchView.venueTableView.delegate = self
-        getVenues()
-
-        
+        searchView.venueSearchBar.delegate = self
+        setupCLManager()
     }
+  
+    func setupCLManager(){
+      locationManager = CLLocationManager()
+      locationManager.delegate = self
+      if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.startUpdatingLocation()
+        searchView.venueMap.showsUserLocation = true
+      } else {
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.startUpdatingLocation()
+        searchView.venueMap.showsUserLocation = true
+      }
+  }
+    
     
     func getVenues() {
+      let coordinate = currentLocation.coordinate
+      let lat = Double(coordinate.latitude)
+      let long = Double(coordinate.longitude)
         VenueAPIClient.getVenuesList(long: long, lat: lat, query: query) { (error, data) in
             if let error = error {
                 print(error.errorMessage())
@@ -44,6 +71,17 @@ class SearchViewController: UIViewController {
                 self.venues = data
             }
         }
+    }
+  
+    func makeAnnotations(){
+      searchView.venueMap.removeAnnotations(annotations)
+      for venue in venues {
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = venue.coordinate
+        annotation.title = venue.name
+        annotations.append(annotation)
+      }
+      searchView.venueMap.addAnnotations(annotations)
     }
     
 }
@@ -82,7 +120,32 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        let venue = venues[indexPath.row]
+        let detailVC = DetailViewController()
+        detailVC.venue = venue
+        navigationController?.pushViewController(detailVC, animated: true)
     }
     
+}
+
+extension SearchViewController: UISearchBarDelegate {
+  func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    if let searchTerm = searchBar.text {
+      query = searchTerm
+    }
+  }
+}
+
+extension SearchViewController: CLLocationManagerDelegate {
+
+  
+  func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    guard let location = locations.last else {
+      print("no locations found")
+      return
+    }
+    currentLocation = location
+    let currentRegion = MKCoordinateRegion(center: currentLocation.coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+    searchView.venueMap.setRegion(currentRegion, animated: true)
+  }
 }
