@@ -12,13 +12,18 @@ final class FolderManager{
     private init(){}
     private static let folderSaveingName = "FolderName.plist"
     private static var savingFolder = [FolderModel]()
-    
     static func removing(index: Int){
     savingFolder.remove(at: index)
     savingEntry()
     }
-    static func appening(type : FolderModel){
+  static func CreateNewFolder(type: FolderModel){
     savingFolder.append(type)
+    savingEntry()
+  }
+  
+  static func appening(type : inout FolderModel, save: SaveModel, index:Int){
+    var folder = savingFolder[index]
+    folder.contents.append(save)
     savingEntry()
     }
     

@@ -10,16 +10,19 @@ import UIKit
 
 class VenuesViewController: UIViewController {
   private lazy var venuesView = VenueCollection()
+  private var folder: FolderModel!
   private var venues = [SaveModel]() {
     didSet {
       venuesView.venueCollection.reloadData()
     }
   }
   
-  
-  override func viewWillAppear(_ animated: Bool) {
-    fetchVenues()
+  convenience init(folder:FolderModel,venues:[SaveModel]){
+    self.init()
+    self.folder = folder
+    self.venues = venues
   }
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     setupDelegates()
@@ -32,14 +35,10 @@ class VenuesViewController: UIViewController {
     venuesView.venueCollection.dataSource = self
   }
   
-  private func fetchVenues() {
-    venues = SavingManager.loadingEntry()
-  }
-  
   @objc private func deleteVenue(sender:UIButton){
     let deleteIndex = sender.tag
-    SavingManager.removing(index: deleteIndex)
-    fetchVenues()
+    folder.contents.remove(at: deleteIndex)
+    // TODO: Persist Delete Contents in Folders
   }
   
   
