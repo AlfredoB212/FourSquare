@@ -24,8 +24,6 @@ class DetailViewController: UIViewController {
         
     }
     
-    
-    
     private func detailLooksSetUp(){
         detailViewSetup.address.text = "Address:" + " \(venue?.location.formattedAddress?[0] ?? "") \(venue?.location.formattedAddress?[1] ?? "No Address")"
         detailViewSetup.saveButton.addTarget(self, action: #selector(saveCommand), for: .touchUpInside)
