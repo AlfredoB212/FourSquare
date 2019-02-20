@@ -15,13 +15,13 @@ class SearchView: UIView {
     
     public lazy var venueSearchBar: UISearchBar = {
         let vsb = UISearchBar()
-        vsb.backgroundColor = .purple
+        vsb.placeholder = "Enter Venue"
         return vsb
     }()
 
-    public lazy var locationTextField: UITextField = {
-        let ltf = UITextField()
-        ltf.backgroundColor = .blue
+    public lazy var locationSearchBar: UISearchBar = {
+        let ltf = UISearchBar()
+        ltf.placeholder = "Enter Location"
         return ltf
     }()
    
@@ -57,7 +57,7 @@ class SearchView: UIView {
 extension SearchView {
     private func setupView() {
         setupSearchBar()
-        setupTextField()
+        setupLocationSearchBar()
         setupMap()
         setupTableView()
         
@@ -71,20 +71,19 @@ extension SearchView {
         venueSearchBar.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         
     }
-    private func setupTextField() {
-        addSubview(locationTextField)
-        locationTextField.translatesAutoresizingMaskIntoConstraints = false
-        locationTextField.topAnchor.constraint(equalTo: venueSearchBar.bottomAnchor, constant: 8).isActive = true
-        locationTextField.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        locationTextField.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        locationTextField.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        locationTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
+    private func setupLocationSearchBar() {
+        addSubview(locationSearchBar)
+        locationSearchBar.translatesAutoresizingMaskIntoConstraints = false
+        locationSearchBar.topAnchor.constraint(equalTo: venueSearchBar.bottomAnchor).isActive = true
+        locationSearchBar.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        locationSearchBar.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        locationSearchBar.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
 
     }
     private func setupMap() {
         addSubview(venueMap)
         venueMap.translatesAutoresizingMaskIntoConstraints = false
-        venueMap.topAnchor.constraint(equalTo: locationTextField.bottomAnchor, constant: 8).isActive = true
+        venueMap.topAnchor.constraint(equalTo: locationSearchBar.bottomAnchor, constant: 8).isActive = true
         venueMap.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         venueMap.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         venueMap.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true

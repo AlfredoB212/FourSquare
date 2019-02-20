@@ -15,10 +15,12 @@ class TabBarViewController: UITabBarController {
         let searchViewController = SearchViewController()
         searchViewController.tabBarItem = UITabBarItem(title: "Search", image: UIImage(named: "search30"), tag: 0)
         
-       
+       let collectionViewController = CollectionViewController()
+        collectionViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 1)
         
         
-        let tabBarList = [UINavigationController(rootViewController: searchViewController)]
+        let tabBarList = [UINavigationController(rootViewController: searchViewController),
+                          UINavigationController(rootViewController: collectionViewController)]
         
         viewControllers = tabBarList
     }
