@@ -13,13 +13,22 @@ import MapKit
 class SearchViewController: UIViewController {
     var locationManager: CLLocationManager!
     let searchView = SearchView()
-    var query = "pizza" {
-      didSet {
-        getVenues()
-      }
+    var location = "Brooklyn" {
+        didSet {
+            getNearby()
+        }
     }
-  var annotations = [MKAnnotation]()
-  var venues = [Venues]() {
+    var query = "pizza" {
+        didSet {
+            if let _ = currentLocation {
+                getVenues()
+            } else {
+                getNearby()
+            }
+        }
+    }
+    var annotations = [MKAnnotation]()
+    var venues = [Venues]() {
         didSet {
             DispatchQueue.main.async {
                 self.searchView.venueTableView.reloadData()
@@ -27,13 +36,13 @@ class SearchViewController: UIViewController {
             }
         }
     }
-  var currentLocation: CLLocation! {
-    didSet {
-      getVenues()
+    var currentLocation: CLLocation? {
+        didSet {
+            getVenues()
+        }
+        
     }
     
-  }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(searchView)
@@ -41,29 +50,34 @@ class SearchViewController: UIViewController {
         searchView.venueTableView.dataSource = self
         searchView.venueTableView.delegate = self
         searchView.venueSearchBar.delegate = self
+        searchView.locationSearchBar.delegate = self
         setupCLManager()
     }
-  
+    
     func setupCLManager(){
-      locationManager = CLLocationManager()
-      locationManager.delegate = self
-      if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.startUpdatingLocation()
-        searchView.venueMap.showsUserLocation = true
-      } else {
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.startUpdatingLocation()
-        searchView.venueMap.showsUserLocation = true
-      }
-  }
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
+        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            locationManager.startUpdatingLocation()
+            searchView.venueMap.showsUserLocation = true
+            getVenues()
+            
+        } else {
+            locationManager.requestWhenInUseAuthorization()
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            getNearby()
+            locationManager.startUpdatingLocation()
+            searchView.venueMap.showsUserLocation = true
+        }
+    }
     
     
     func getVenues() {
-      let coordinate = currentLocation.coordinate
-      let lat = Double(coordinate.latitude)
-      let long = Double(coordinate.longitude)
+        
+        guard let coordinate = currentLocation?.coordinate else { return }
+        let lat = Double(coordinate.latitude)
+        let long = Double(coordinate.longitude)
         VenueAPIClient.getVenuesList(long: long, lat: lat, query: query) { (error, data) in
             if let error = error {
                 print(error.errorMessage())
@@ -72,16 +86,26 @@ class SearchViewController: UIViewController {
             }
         }
     }
-  
+    
+    func getNearby() {
+        VenueAPIClient.getNearbyVenuesList(location: location, query: query) { (error, data) in
+            if let error = error {
+                print(error.errorMessage())
+            } else if let data = data {
+                self.venues = data
+            }
+        }
+    }
+    
     func makeAnnotations(){
-      searchView.venueMap.removeAnnotations(annotations)
-      for venue in venues {
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = venue.coordinate
-        annotation.title = venue.name
-        annotations.append(annotation)
-      }
-      searchView.venueMap.addAnnotations(annotations)
+        searchView.venueMap.removeAnnotations(annotations)
+        for venue in venues {
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = venue.coordinate
+            annotation.title = venue.name
+            annotations.append(annotation)
+        }
+        searchView.venueMap.addAnnotations(annotations)
     }
     
 }
@@ -95,20 +119,20 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
         let cellToSet = venues[indexPath.row]
         PhotoAPIClient.getPhoto(venueId: cellToSet.id) { (error, data) in
             DispatchQueue.main.async {
-            if let error = error {
-                print(error.errorMessage())
-            } else if let data = data {
-                let prefix = data[0].prefix
-                let suffix = data[0].suffix
-                let urlString = prefix + "original" + suffix
-                ImageHelper.fetchImageFromNetwork(urlString: urlString, completion: { (error, image) in
-                    if let error = error {
-                        print(error.errorMessage())
-                    } else if let image = image {
-                        cell.venueImage.image = image
-                    }
-                })
-            }
+                if let error = error {
+                    print(error.errorMessage())
+                } else if let data = data {
+                    let prefix = data[0].prefix
+                    let suffix = data[0].suffix
+                    let urlString = prefix + "original" + suffix
+                    ImageHelper.fetchImageFromNetwork(urlString: urlString, completion: { (error, image) in
+                        if let error = error {
+                            print(error.errorMessage())
+                        } else if let image = image {
+                            cell.venueImage.image = image
+                        }
+                    })
+                }
             }
         }
         cell.venueNameLabel.text = cellToSet.name
@@ -129,23 +153,29 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
 }
 
 extension SearchViewController: UISearchBarDelegate {
-  func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-    if let searchTerm = searchBar.text {
-      query = searchTerm
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        if let searchTerm = searchView.venueSearchBar.text {
+            query = searchTerm
+        }
+        if let locationTerm = searchView.locationSearchBar.text {
+            location = locationTerm
+            
+        }
     }
-  }
 }
 
 extension SearchViewController: CLLocationManagerDelegate {
-
-  
-  func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-    guard let location = locations.last else {
-      print("no locations found")
-      return
+    
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else {
+            print("no locations found")
+            return
+        }
+        currentLocation = location
+        let currentRegion = MKCoordinateRegion(center: currentLocation!.coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+        searchView.venueMap.setRegion(currentRegion, animated: true)
     }
-    currentLocation = location
-    let currentRegion = MKCoordinateRegion(center: currentLocation.coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
-    searchView.venueMap.setRegion(currentRegion, animated: true)
-  }
+    
+    
 }
