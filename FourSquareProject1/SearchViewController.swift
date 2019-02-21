@@ -133,7 +133,7 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
                     let urlString = prefix + "original" + suffix
                     ImageHelper.fetchImageFromNetwork(urlString: urlString, completion: { (error, image) in
                         if let error = error {
-                            print(error.errorMessage())
+                          cell.venueImage.image = UIImage(named: "placeHolder")
                         } else if let image = image {
                             cell.venueImage.image = image
                         }
