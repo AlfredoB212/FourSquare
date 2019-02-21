@@ -58,9 +58,11 @@ class DetailViewSetup: UIView {
     
     lazy var tip: UITextView = {
         var textField = UITextView()
+        let label = UILabel()
         textField.makeTextWritingDirectionLeftToRight(self)
         textField.backgroundColor = .blue
         textField.allowsEditingTextAttributes = true
+        textField.font = label.font
         
         return textField
     }()

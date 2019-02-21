@@ -23,7 +23,19 @@ class DetailViewController: UIViewController {
         let rightBarItem = UIBarButtonItem(customView: detailViewSetup.saveButton)
         self.navigationItem.rightBarButtonItem = rightBarItem
         detailLooksSetUp()
-        
+        setupTapGesture()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super .viewWillAppear(animated)
+        folders = FolderManager.loadingEntry()
+    }
+    private func setupTapGesture(){
+        let tapGesture = UITapGestureRecognizer()
+        tapGesture.addTarget(self, action: #selector(dismissText(_:)))
+        detailViewSetup.addGestureRecognizer(tapGesture)
+    }
+    @objc private func dismissText(_ sender:UITapGestureRecognizer){
+        detailViewSetup.tip.resignFirstResponder()
     }
     
     private func detailLooksSetUp(){
@@ -68,20 +80,28 @@ class DetailViewController: UIViewController {
         }else{
             location = "No Location"
         }
-    
-            if detailViewSetup.tip.text.isEmpty {
+        if folders.isEmpty{
+                let alert = UIAlertController(title: "Missing Folders", message: "Please create a folder before saving", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            detailViewSetup.tip.resignFirstResponder()
+
+            
+            present(alert, animated: true, completion: nil)
+            
+        } else if detailViewSetup.tip.text.isEmpty {
                 let alert = UIAlertController(title: "Missing Tip", message: "Tip needs to be field out to save this venue", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .default))
+            detailViewSetup.tip.resignFirstResponder()
 
-                
+
                 present(alert, animated: true, completion: nil)
             }else{
         let savemodel = SaveModel.init(picImage: picimage, name: venue?.name ?? "No Name", address: location, latitude: Float(venue?.location.lat ?? 0.0), longitude: Float(venue?.location.lng ?? 0.0), review: detailViewSetup.tip.text.replacingOccurrences(of: "/n", with: " "))
                 let modalVC = ModalViewController(folders: folders, venue: savemodel)
+                detailViewSetup.tip.resignFirstResponder()
                 modalVC.modalPresentationStyle = .overFullScreen
                 present(modalVC, animated: true, completion: nil)
 //        print(savemodel)
-        resignFirstResponder()
                 detailViewSetup.tip.text = ""
         }
     }
