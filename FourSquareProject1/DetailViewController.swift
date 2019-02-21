@@ -14,6 +14,7 @@ class DetailViewController: UIViewController {
     var venue: Venues?
     var location: String!
     var picimage = ""
+    var folders = FolderManager.loadingEntry()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,13 +72,17 @@ class DetailViewController: UIViewController {
             if detailViewSetup.tip.text.isEmpty {
                 let alert = UIAlertController(title: "Missing Tip", message: "Tip needs to be field out to save this venue", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .default))
+
                 
                 present(alert, animated: true, completion: nil)
             }else{
-        let savemodel = SaveModel.init(picImage: picimage, name: venue?.name ?? "No Name", address: location, latitude: Float(venue?.location.lat ?? 0.0), longitude: Float(venue?.location.lng ?? 0.0), review: "")
-        print(savemodel)
+        let savemodel = SaveModel.init(picImage: picimage, name: venue?.name ?? "No Name", address: location, latitude: Float(venue?.location.lat ?? 0.0), longitude: Float(venue?.location.lng ?? 0.0), review: detailViewSetup.tip.text.replacingOccurrences(of: "/n", with: " "))
+                let modalVC = ModalViewController(folders: folders, venue: savemodel)
+                modalVC.modalPresentationStyle = .overFullScreen
+                present(modalVC, animated: true, completion: nil)
+//        print(savemodel)
         resignFirstResponder()
-        SavingManager.appening(type: savemodel)
+                detailViewSetup.tip.text = ""
         }
     }
     

@@ -79,3 +79,11 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout{
         return CGSize(width: 300, height: 200)
     }
 }
+
+extension CollectionViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let folder = folders[indexPath.row]
+        let venuesVC = VenuesViewController(folder: folder)
+        navigationController?.pushViewController(venuesVC, animated: true)
+    }
+}
