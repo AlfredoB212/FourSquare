@@ -7,12 +7,14 @@
 //
 
 import UIKit
+import MapKit
 
 class DetailViewController: UIViewController {
     var detailViewSetup = DetailViewSetup()
     var venue: Venues?
     var location: String!
     var picimage = ""
+    var folders = FolderManager.loadingEntry()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,9 +51,15 @@ class DetailViewController: UIViewController {
     }
     
     @objc func direction(){
+        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
         let directionVC = DirectionViewController()
         directionVC.venue = venue
         navigationController?.pushViewController(directionVC, animated: true)
+        }else if CLLocationManager.authorizationStatus() == .denied{
+            let alert = UIAlertController(title: "Problem", message: "User Location is unknown", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "ok", style: .cancel, handler: nil))
+            present(alert, animated: true, completion: nil)
+        }
     }
 
     @objc func saveCommand(){
@@ -64,13 +72,18 @@ class DetailViewController: UIViewController {
             if detailViewSetup.tip.text.isEmpty {
                 let alert = UIAlertController(title: "Missing Tip", message: "Tip needs to be field out to save this venue", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .default))
+
                 
                 present(alert, animated: true, completion: nil)
+            }else{
+        let savemodel = SaveModel.init(picImage: picimage, name: venue?.name ?? "No Name", address: location, latitude: Float(venue?.location.lat ?? 0.0), longitude: Float(venue?.location.lng ?? 0.0), review: detailViewSetup.tip.text.replacingOccurrences(of: "/n", with: " "))
+                let modalVC = ModalViewController(folders: folders, venue: savemodel)
+                modalVC.modalPresentationStyle = .overFullScreen
+                present(modalVC, animated: true, completion: nil)
+//        print(savemodel)
+        resignFirstResponder()
+                detailViewSetup.tip.text = ""
         }
-        let savemodel = SaveModel.init(picImage: picimage, name: venue?.name ?? "No Name", address: location, latitude: Float(venue?.location.lat ?? 0.0), longitude: Float(venue?.location.lng ?? 0.0), review: "")
-        print(savemodel)
-        
-        SavingManager.appening(type: savemodel)
     }
     
 }

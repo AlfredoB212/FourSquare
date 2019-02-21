@@ -20,10 +20,17 @@ final class FolderManager{
     savingFolder.append(type)
     savingEntry()
   }
+    
+static func deletor(type : inout FolderModel, index:Int){
+    guard let folderIndex = (savingFolder.firstIndex { $0.name == type.name }) else { return }
+        savingFolder[folderIndex].contents.remove(at: index)
+        //    folder.contents.append(save)
+        savingEntry()
+    }
   
   static func appening(type : inout FolderModel, save: SaveModel, index:Int){
-    var folder = savingFolder[index]
-    folder.contents.append(save)
+    savingFolder[index].contents.append(save)
+//    folder.contents.append(save)
     savingEntry()
     }
     
