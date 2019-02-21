@@ -162,9 +162,11 @@ extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if let searchTerm = searchView.venueSearchBar.text {
             query = searchTerm
+            resignFirstResponder()
         }
         if let locationTerm = searchView.locationSearchBar.text {
             location = locationTerm
+            resignFirstResponder()
             
         }
     }

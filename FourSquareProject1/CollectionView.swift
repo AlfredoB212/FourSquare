@@ -29,6 +29,7 @@ lazy var myCollectionView: UICollectionView = {
         }
         func commonInit(){
             backgroundColor = .white
+            self.myCollectionView.register(CollectionViewCell.self, forCellWithReuseIdentifier: "CollectionViewCell")
             setup()
         }
         
@@ -43,3 +44,5 @@ lazy var myCollectionView: UICollectionView = {
         }
         
 }
+
+

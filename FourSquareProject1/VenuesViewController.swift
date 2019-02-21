@@ -17,16 +17,15 @@ class VenuesViewController: UIViewController {
     }
   }
   
-  convenience init(folder:FolderModel,venues:[SaveModel]){
+  convenience init(folder:FolderModel){
     self.init()
     self.folder = folder
-    self.venues = venues
+    self.venues = folder.contents
   }
   
   override func viewDidLoad() {
     super.viewDidLoad()
     setupDelegates()
-    SavingManager.savingEntry()
     view.addSubview(venuesView)
   }
   
@@ -34,10 +33,18 @@ class VenuesViewController: UIViewController {
     venuesView.venueCollection.delegate = self
     venuesView.venueCollection.dataSource = self
   }
+    private func deleteVenueContent(deleteIndex:Int){
+        venues.remove(at: deleteIndex)
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        navigationController?.popViewController(animated: true)
+    }
   
   @objc private func deleteVenue(sender:UIButton){
     let deleteIndex = sender.tag
-    folder.contents.remove(at: deleteIndex)
+    deleteVenueContent(deleteIndex: deleteIndex)
+    FolderManager.deletor(type: &folder, index: deleteIndex)
+    
     // TODO: Persist Delete Contents in Folders
   }
   

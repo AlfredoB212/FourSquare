@@ -19,6 +19,12 @@ class ModalViewController: UIViewController {
         setupUI()
         setupTapGesture()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupDelegates()
+        setupUI()
+        setupTapGesture()
+    }
   
   public convenience init(folders:[FolderModel], venue:SaveModel){
     self.init()
@@ -66,9 +72,7 @@ extension ModalViewController: UITableViewDataSource {
 extension ModalViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     var folder = folders[indexPath.row]
-    folder.contents.append(venue)
     FolderManager.appening(type: &folder, save: venue, index:indexPath.row)
-    FolderManager.savingEntry()
     let folders2 = FolderManager.loadingEntry()
     dump(folders2)
     dismiss(animated: true, completion: nil)
