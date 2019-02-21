@@ -9,25 +9,34 @@
 import UIKit
 class CollectionViewController: UIViewController {
 let controlView = CollectionView()
-var folders = [FolderModel]()
-var foldersManagers = FolderManager()
+    var folders = [FolderModel](){
+        didSet{
+           self.controlView.myCollectionView.reloadData()
+        }
+    }
+//var foldersManagers = FolderManager()
 var nameOfFolder = String()
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(controlView)
         controlView.myCollectionView.dataSource = self 
         controlView.myCollectionView.delegate = self
-        
-        
-    }
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(showAlert))
+        }
     let cellIdentifier = "CollectionViewCell"
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super .viewWillAppear(animated)
+        folders = FolderManager.loadingEntry()
+    }
+    
     
     func createANewFolder(Folder: FolderModel) {
         folders.append(Folder)
         
         }
     
-    func showAlert(){
+    @objc func showAlert(){
         let alert = UIAlertController(title: "Enter title for new folder", message: "No spaces allowed or special characters", preferredStyle: .alert)
         alert.addTextField { (textField) in
             textField.placeholder = "enter folder title"
@@ -36,8 +45,13 @@ var nameOfFolder = String()
         let okay = UIAlertAction(title: "Okay", style: .default) { (UIAlertAction) in
             if var text = alert.textFields?.first?.text{
                 text.insert("@", at: text.startIndex)
-                UserDefaults.standard.set(text, forKey: "FolderName")
-                self.nameOfFolder = text
+                print(text)
+//                UserDefaults.standard.set(text, forKey: "FolderName")
+//                self.nameOfFolder = text
+                let folder = FolderModel(name: text, contents: [SaveModel]())
+                FolderManager.CreateNewFolder(type: folder)
+                
+                self.folders = FolderManager.loadingEntry()
             }
         }
         alert.addAction(okay)
@@ -46,12 +60,13 @@ var nameOfFolder = String()
 }
 extension CollectionViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        return folders.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionViewCell", for: indexPath) as? CollectionViewCell else { fatalError("")}
-        cell.collectionNameLabel.text = nameOfFolder
+        let folder = folders[indexPath.row]
+        cell.collectionNameLabel.text = folder.name
         cell.backgroundColor = .blue
         return cell
     }
