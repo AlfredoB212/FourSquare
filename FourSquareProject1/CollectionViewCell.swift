@@ -31,10 +31,10 @@ class CollectionViewCell: UICollectionViewCell {
     private func setupCollectionNameLabel() {
         addSubview(collectionNameLabel)
         collectionNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        collectionNameLabel.topAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 10).isActive = true
-        collectionNameLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.95).isActive = true
-        collectionNameLabel.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.1).isActive = true
-        collectionNameLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        collectionNameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10).isActive = true
+        collectionNameLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.95).isActive = true
+        collectionNameLabel.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.1).isActive = true
+        collectionNameLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
 
 
 }
