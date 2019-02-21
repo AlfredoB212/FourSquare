@@ -10,20 +10,22 @@ import UIKit
 
 class VenuesViewController: UIViewController {
   private lazy var venuesView = VenueCollection()
+  private var folder: FolderModel!
   private var venues = [SaveModel]() {
     didSet {
       venuesView.venueCollection.reloadData()
     }
   }
   
-  
-  override func viewWillAppear(_ animated: Bool) {
-    fetchVenues()
+  convenience init(folder:FolderModel){
+    self.init()
+    self.folder = folder
+    self.venues = folder.contents
   }
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     setupDelegates()
-    SavingManager.savingEntry()
     view.addSubview(venuesView)
   }
   
@@ -31,15 +33,19 @@ class VenuesViewController: UIViewController {
     venuesView.venueCollection.delegate = self
     venuesView.venueCollection.dataSource = self
   }
-  
-  private func fetchVenues() {
-    venues = SavingManager.loadingEntry()
-  }
+    private func deleteVenueContent(deleteIndex:Int){
+        venues.remove(at: deleteIndex)
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        navigationController?.popViewController(animated: true)
+    }
   
   @objc private func deleteVenue(sender:UIButton){
     let deleteIndex = sender.tag
-    SavingManager.removing(index: deleteIndex)
-    fetchVenues()
+    deleteVenueContent(deleteIndex: deleteIndex)
+    FolderManager.deletor(type: &folder, index: deleteIndex)
+    
+    // TODO: Persist Delete Contents in Folders
   }
   
   

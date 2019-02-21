@@ -7,34 +7,83 @@
 //
 
 import UIKit
-
 class CollectionViewController: UIViewController {
-    
-    lazy var myCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 16
-        layout.scrollDirection = .vertical
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = .green
-        return cv
-    } ()
-    
-    
+let controlView = CollectionView()
+    var folders = [FolderModel](){
+        didSet{
+           self.controlView.myCollectionView.reloadData()
+        }
+    }
+//var foldersManagers = FolderManager()
+var nameOfFolder = String()
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(myCollectionView)
-        setConstraints()
-        
+        view.addSubview(controlView)
+        controlView.myCollectionView.dataSource = self 
+        controlView.myCollectionView.delegate = self
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(showAlert))
+        }
+    let cellIdentifier = "CollectionViewCell"
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super .viewWillAppear(animated)
+        folders = FolderManager.loadingEntry()
     }
     
     
-    func setConstraints() {
-        myCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        myCollectionView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
-        myCollectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
-        myCollectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
-        myCollectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
+    func createANewFolder(Folder: FolderModel) {
+        folders.append(Folder)
         
+        }
+    
+    @objc func showAlert(){
+        let alert = UIAlertController(title: "Enter title for new folder", message: "No spaces allowed or special characters", preferredStyle: .alert)
+        alert.addTextField { (textField) in
+            textField.placeholder = "enter folder title"
+            textField.textAlignment = .center
+        }
+        let okay = UIAlertAction(title: "Okay", style: .default) { (UIAlertAction) in
+            if var text = alert.textFields?.first?.text{
+                text.insert("@", at: text.startIndex)
+                print(text)
+//                UserDefaults.standard.set(text, forKey: "FolderName")
+//                self.nameOfFolder = text
+                let folder = FolderModel(name: text, contents: [SaveModel]())
+                FolderManager.CreateNewFolder(type: folder)
+                
+                self.folders = FolderManager.loadingEntry()
+            }
+        }
+        alert.addAction(okay)
+        present(alert, animated: true, completion: nil)
+    }
+}
+extension CollectionViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return folders.count
     }
     
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionViewCell", for: indexPath) as? CollectionViewCell else { fatalError("")}
+        let folder = folders[indexPath.row]
+        cell.collectionNameLabel.text = folder.name
+        cell.backgroundColor = .blue
+        return cell
+    }
+    
+    
+}
+
+extension CollectionViewController: UICollectionViewDelegateFlowLayout{
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 300, height: 200)
+    }
+}
+
+extension CollectionViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let folder = folders[indexPath.row]
+        let venuesVC = VenuesViewController(folder: folder)
+        navigationController?.pushViewController(venuesVC, animated: true)
+    }
 }

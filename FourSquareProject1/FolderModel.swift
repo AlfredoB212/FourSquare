@@ -10,5 +10,5 @@ import Foundation
 
 struct FolderModel: Codable {
     let name: String
-    let contents: [SaveModel]
+    var contents: [SaveModel]
 }
