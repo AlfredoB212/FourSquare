@@ -47,13 +47,18 @@ class SearchViewController: UIViewController {
         super.viewDidLoad()
         view.addSubview(searchView)
         navigationItem.title = "Search"
-        searchView.venueTableView.dataSource = self
-        searchView.venueTableView.delegate = self
-        searchView.venueSearchBar.delegate = self
-        searchView.locationSearchBar.delegate = self
-        locationService.delegate = self
+        setupDelegates()
         setupCLManager()
+        locationService.getCoordinate(addressString: location)
     }
+  
+    func setupDelegates() {
+      searchView.venueTableView.dataSource = self
+      searchView.venueTableView.delegate = self
+      searchView.venueSearchBar.delegate = self
+      searchView.locationSearchBar.delegate = self
+      locationService.delegate = self
+  }
     
     func setupCLManager(){
         locationManager = CLLocationManager()
