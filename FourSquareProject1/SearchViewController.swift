@@ -42,7 +42,7 @@ class SearchViewController: UIViewController {
         }
         
     }
-    
+    var locationService = LocationService()
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(searchView)
@@ -51,6 +51,7 @@ class SearchViewController: UIViewController {
         searchView.venueTableView.delegate = self
         searchView.venueSearchBar.delegate = self
         searchView.locationSearchBar.delegate = self
+        locationService.delegate = self
         setupCLManager()
     }
     
@@ -178,4 +179,16 @@ extension SearchViewController: CLLocationManagerDelegate {
     }
     
     
+}
+
+extension SearchViewController: LocationServiceDelegate {
+  func didReceiveError(_ service: LocationService, error: Error) {
+    print(error)
+  }
+  
+  func didReceiveCoordinate(_ service: LocationService, coordinate: CLLocationCoordinate2D) {
+    let currentRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+    searchView.venueMap.setRegion(currentRegion, animated: true)
+  }
+  
 }
