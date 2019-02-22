@@ -19,6 +19,7 @@ var nameOfFolder = String()
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(controlView)
+        title = "My Collection"
         controlView.myCollectionView.dataSource = self 
         controlView.myCollectionView.delegate = self
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(showAlert))
@@ -46,8 +47,7 @@ var nameOfFolder = String()
             if var text = alert.textFields?.first?.text{
                 text.insert("@", at: text.startIndex)
                 print(text)
-//                UserDefaults.standard.set(text, forKey: "FolderName")
-//                self.nameOfFolder = text
+
                 let folder = FolderModel(name: text, contents: [SaveModel]())
                 FolderManager.CreateNewFolder(type: folder)
                 
@@ -67,7 +67,10 @@ extension CollectionViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionViewCell", for: indexPath) as? CollectionViewCell else { fatalError("")}
         let folder = folders[indexPath.row]
         cell.collectionNameLabel.text = folder.name
-        cell.backgroundColor = .blue
+        cell.layer.borderWidth = 3
+        cell.layer.cornerRadius = 10
+        cell.layer.borderColor = UIColor.black.cgColor
+        cell.backgroundColor = .lightGray
         return cell
     }
     

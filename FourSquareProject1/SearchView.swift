@@ -27,13 +27,11 @@ class SearchView: UIView {
    
     public lazy var venueMap: MKMapView = {
         let vm = MKMapView()
-        vm.backgroundColor = .yellow
         return vm
     }()
     
     public lazy var venueTableView: UITableView = {
         let vtv = UITableView()
-        vtv.backgroundColor = .red
         return vtv
     }()
     

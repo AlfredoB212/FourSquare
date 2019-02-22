@@ -56,6 +56,10 @@ extension VenuesViewController: UICollectionViewDataSource {
     guard let cell = venuesView.venueCollection.dequeueReusableCell(withReuseIdentifier: "VenueCell", for: indexPath) as? VenueCell else { fatalError("") }
     let venue = venues[indexPath.row]
     cell.configureCell(venue:venue,selector: #selector(deleteVenue(sender:)), target: self)
+    cell.reviewTextView.font = cell.venueNameLabel.font
+    cell.layer.borderWidth = 3
+    cell.layer.cornerRadius = 10
+    cell.layer.borderColor = UIColor.black.cgColor
     cell.deleteButton.tag = indexPath.row
     return cell
   }
