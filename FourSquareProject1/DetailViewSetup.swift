@@ -23,9 +23,7 @@ class DetailViewSetup: UIView {
     
     lazy var picture: UIImageView = {
         var image = UIImageView()
-        image.backgroundColor = .black
-        
-    return image
+        return image
     }()
     
     lazy var address: UILabel = {
@@ -33,7 +31,6 @@ class DetailViewSetup: UIView {
         label.numberOfLines = 0
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
         label.text = "Address"
-        
         return label
     }()
     
@@ -42,14 +39,12 @@ class DetailViewSetup: UIView {
         label.numberOfLines = 0
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
         label.text = "Name"
-
         return label
     }()
     
     lazy var direction: UIButton = {
         let button = UIButton()
-        
-        button.backgroundColor = .green
+        button.backgroundColor = .blue
         button.titleLabel?.textColor = .white
         button.setTitle("Direction", for: .normal)
         
@@ -60,10 +55,8 @@ class DetailViewSetup: UIView {
         var textField = UITextView()
         let label = UILabel()
         textField.makeTextWritingDirectionLeftToRight(self)
-        textField.backgroundColor = .blue
         textField.allowsEditingTextAttributes = true
         textField.font = label.font
-        
         return textField
     }()
     
@@ -93,7 +86,7 @@ class DetailViewSetup: UIView {
     func pictureLayout(){
         addSubview(picture)
         picture.translatesAutoresizingMaskIntoConstraints = false
-        picture.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
+        picture.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
         picture.heightAnchor.constraint(equalTo: safeAreaLayoutGuide.heightAnchor, multiplier: 0.5).isActive = true
         picture.leftAnchor.constraint(equalTo: leftAnchor, constant: 15).isActive = true
         picture.rightAnchor.constraint(equalTo: rightAnchor, constant: -15).isActive = true
@@ -131,7 +124,7 @@ class DetailViewSetup: UIView {
         addSubview(tip)
         tip.translatesAutoresizingMaskIntoConstraints = false
         tip.topAnchor.constraint(equalTo: direction.bottomAnchor, constant: 15).isActive = true
-        tip.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
+        tip.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
         tip.leftAnchor.constraint(equalTo: leftAnchor, constant: 15).isActive = true
         tip.rightAnchor.constraint(equalTo: rightAnchor, constant: -15).isActive = true
 

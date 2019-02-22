@@ -11,6 +11,7 @@ import UIKit
 class VenueCell: UICollectionViewCell {
     public lazy var venueNameLabel: UILabel = {
       let label = UILabel()
+    label.textAlignment = .center
       label.backgroundColor = .white
       return label
     }()
@@ -63,7 +64,7 @@ class VenueCell: UICollectionViewCell {
   
   public func configureCell(venue:SaveModel,selector:Selector,target:Any){
     venueNameLabel.text = venue.name
-    venueImageView.image = UIImage(named:venue.picImage)
+    venueImageView.image = UIImage(named:venue.picImage) ?? UIImage(named: "placeHolder")
     venueAddressLabel.text = venue.address
     reviewTextView.text = venue.review
     deleteButton.backgroundColor = .white
@@ -73,7 +74,7 @@ class VenueCell: UICollectionViewCell {
   private func setupVenueImageView(){
       addSubview(venueImageView)
       venueImageView.translatesAutoresizingMaskIntoConstraints = false
-      venueImageView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+    venueImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10).isActive = true
       venueImageView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.95).isActive = true
       venueImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
 }
