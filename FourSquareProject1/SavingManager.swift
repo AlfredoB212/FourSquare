@@ -9,47 +9,46 @@
 import Foundation
 
 final class SavingManager{
-    private init(){}
-    private static let saving = "SavedVenue.plist"
-    private static var save = [SaveModel]()
+  private init(){}
+  private static let saving = "SavedVenue.plist"
+  private static var save = [SaveModel]()
+  
+  static func removing(index: Int){
+    save.remove(at: index)
+    savingEntry()
+  }
+  static func appening(type : SaveModel){
+    save.append(type)
+    savingEntry()
+  }
+  
+  static func savingEntry(){
     
-    static func removing(index: Int){
-        save.remove(at: index)
-        savingEntry()
+    let pathToSaveTo = DataPersistenceManager.filepathToDocumentsDirectory(filename: saving)
+    do {
+      let favoriteQuiz = try PropertyListEncoder().encode(save)
+      try favoriteQuiz.write(to: pathToSaveTo, options: Data.WritingOptions.atomic)
+    } catch {
+      print("error in the static function savingEntry: \(error)")
     }
-    static func appening(type : SaveModel){
-        save.append(type)
-        savingEntry()
-    }
+  }
+  
+  static func loadingEntry() -> [SaveModel]{
     
-    static func savingEntry(){
-        
-        let pathToSaveTo = DataPersistenceManager.filepathToDocumentsDirectory(filename: saving)
-        do{
-            let favoriteQuiz = try PropertyListEncoder().encode(save)
-            try favoriteQuiz.write(to: pathToSaveTo, options: Data.WritingOptions.atomic)
-        }catch{
-            print("error in the static function savingEntry: \(error)")
+    let path = DataPersistenceManager.filepathToDocumentsDirectory(filename: saving).path
+    if FileManager.default.fileExists(atPath: path){
+      if let data = FileManager.default.contents(atPath: path){
+        do {
+          save = try PropertyListDecoder().decode([SaveModel].self, from: data)
+        } catch {
+          print(error)
         }
+      } else {
+        print("LoadtheEntry func data area is nil")
+      }
+    } else {
+      print("\(saving) does not exsist")
     }
-    
-    static func loadingEntry() -> [SaveModel]{
-        
-        let path = DataPersistenceManager.filepathToDocumentsDirectory(filename: saving).path
-        if FileManager.default.fileExists(atPath: path){
-            if let data = FileManager.default.contents(atPath: path){
-                do{
-                    save = try PropertyListDecoder().decode([SaveModel].self, from: data)
-                }catch{
-                    print(error)
-                }
-            }else{
-                print("LoadtheEntry func data area is nil")
-            }
-        }
-        else{
-            print("\(saving) does not exsist")
-        }
-        return save
-    }
+    return save
+  }
 }

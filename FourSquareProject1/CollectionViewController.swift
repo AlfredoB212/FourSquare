@@ -8,14 +8,14 @@
 
 import UIKit
 class CollectionViewController: UIViewController {
-let controlView = CollectionView()
-    var folders = [FolderModel](){
+  let controlView = CollectionView()
+  var folders = [FolderModel](){
         didSet{
            self.controlView.myCollectionView.reloadData()
         }
     }
-//var foldersManagers = FolderManager()
-var nameOfFolder = String()
+  let cellIdentifier = "CollectionViewCell"
+  
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(controlView)
@@ -24,18 +24,11 @@ var nameOfFolder = String()
         controlView.myCollectionView.delegate = self
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(showAlert))
         }
-    let cellIdentifier = "CollectionViewCell"
-    
+  
     override func viewWillAppear(_ animated: Bool) {
-        super .viewWillAppear(animated)
+        super.viewWillAppear(animated)
         folders = FolderManager.loadingEntry()
     }
-    
-    
-    func createANewFolder(Folder: FolderModel) {
-        folders.append(Folder)
-        
-        }
     
     @objc func showAlert(){
         let alert = UIAlertController(title: "Enter title for new folder", message: "No spaces allowed or special characters", preferredStyle: .alert)
@@ -46,17 +39,19 @@ var nameOfFolder = String()
         let okay = UIAlertAction(title: "Okay", style: .default) { (UIAlertAction) in
             if var text = alert.textFields?.first?.text{
                 text.insert("@", at: text.startIndex)
-                print(text)
-
                 let folder = FolderModel(name: text, contents: [SaveModel]())
                 FolderManager.CreateNewFolder(type: folder)
-                
                 self.folders = FolderManager.loadingEntry()
             }
         }
         alert.addAction(okay)
         present(alert, animated: true, completion: nil)
     }
+  @objc private func deleteFolder(_ sender:UIButton){
+    let deleteAtIndex = sender.tag
+    FolderManager.removing(at: deleteAtIndex)
+    folders = FolderManager.loadingEntry()
+  }
 }
 extension CollectionViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -66,11 +61,13 @@ extension CollectionViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionViewCell", for: indexPath) as? CollectionViewCell else { fatalError("")}
         let folder = folders[indexPath.row]
+        cell.deleteButton.tag = indexPath.row
         cell.collectionNameLabel.text = folder.name
         cell.layer.borderWidth = 3
         cell.layer.cornerRadius = 10
         cell.layer.borderColor = UIColor.black.cgColor
         cell.backgroundColor = .lightGray
+        cell.deleteButton.addTarget(self, action: #selector(deleteFolder(_:)), for: .touchUpInside)
         return cell
     }
     

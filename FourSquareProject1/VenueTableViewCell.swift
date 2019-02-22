@@ -9,8 +9,7 @@
 import UIKit
 
 class VenueTableViewCell: UITableViewCell {
-    
-
+  
     lazy var venueImage: UIImageView = {
         let image = UIImageView()
         image.backgroundColor = .purple
@@ -51,7 +50,6 @@ extension VenueTableViewCell {
         venueImage.translatesAutoresizingMaskIntoConstraints = false
         venueImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true
         venueImage.topAnchor.constraint(equalTo: topAnchor, constant: 10).isActive = true
-        //venueImage.heightAnchor.constraint(equalToConstant: 100).isActive = true
         venueImage.widthAnchor.constraint(equalToConstant: 100).isActive = true
         venueImage.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
     }

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+
 struct ImageModel: Codable {
   public let url:String
   public let data: Data

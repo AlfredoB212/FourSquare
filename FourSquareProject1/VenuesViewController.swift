@@ -43,7 +43,7 @@ class VenuesViewController: UIViewController {
   @objc private func deleteVenue(sender:UIButton){
     let deleteIndex = sender.tag
     deleteVenueContent(deleteIndex: deleteIndex)
-    FolderManager.deletor(type: &folder, index: deleteIndex)
+    FolderManager.deletor(type: &folder, at: deleteIndex)
     
     // TODO: Persist Delete Contents in Folders
   }

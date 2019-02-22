@@ -11,7 +11,7 @@ import UIKit
 class VenueCell: UICollectionViewCell {
     public lazy var venueNameLabel: UILabel = {
       let label = UILabel()
-    label.textAlignment = .center
+      label.textAlignment = .center
       label.backgroundColor = .white
       return label
     }()
@@ -22,6 +22,8 @@ class VenueCell: UICollectionViewCell {
     public lazy var venueAddressLabel: UILabel = {
       let label = UILabel()
       label.backgroundColor = .white
+      label.numberOfLines = 0
+      label.lineBreakMode = NSLineBreakMode.byWordWrapping
       return label
     }()
     public lazy var reviewTextView: UITextView = {
@@ -31,12 +33,12 @@ class VenueCell: UICollectionViewCell {
       return textView
     }()
     public lazy var deleteButton: UIButton = {
-    let button = UIButton()
-    button.setTitle("Delete", for: .normal)
-    button.setTitleColor(.black, for: .normal)
-    button.layer.cornerRadius = 5
-    button.layer.zPosition = 10
-    return button
+      let button = UIButton()
+      button.setTitle("Delete", for: .normal)
+      button.setTitleColor(.black, for: .normal)
+      button.layer.cornerRadius = 5
+      button.layer.zPosition = 10
+      return button
     }()
 
   override init(frame: CGRect) {
@@ -74,7 +76,7 @@ class VenueCell: UICollectionViewCell {
   private func setupVenueImageView(){
       addSubview(venueImageView)
       venueImageView.translatesAutoresizingMaskIntoConstraints = false
-    venueImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10).isActive = true
+      venueImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10).isActive = true
       venueImageView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.95).isActive = true
       venueImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
 }
