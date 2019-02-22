@@ -15,11 +15,13 @@ class DetailViewController: UIViewController {
     var location: String!
     var picimage = ""
     var folders = FolderManager.loadingEntry()
+    var placeHolderText = "Enter your tip here"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Create Post"
         view.addSubview(detailViewSetup)
+        detailViewSetup.tip.delegate = self
         let rightBarItem = UIBarButtonItem(customView: detailViewSetup.saveButton)
         self.navigationItem.rightBarButtonItem = rightBarItem
         detailLooksSetUp()
@@ -39,15 +41,21 @@ class DetailViewController: UIViewController {
     }
     
     private func detailLooksSetUp(){
-        detailViewSetup.address.text = "Address:" + " \(venue?.location.formattedAddress?[0] ?? "") \(venue?.location.formattedAddress?[1] ?? "No Address")"
+        detailViewSetup.address.text = "Address :" + " \(venue?.location.formattedAddress?[0] ?? "") \(venue?.location.formattedAddress?[1] ?? "No Address")"
         detailViewSetup.saveButton.addTarget(self, action: #selector(saveCommand), for: .touchUpInside)
-        detailViewSetup.nameOfLocation.text = "Name of place: \(venue?.name ?? "No Name")"
+        detailViewSetup.nameOfLocation.text = "Name of place : \(venue?.name ?? "No Name")"
         detailViewSetup.direction.setTitle("Direction", for: .normal)
+        detailViewSetup.tip.text = placeHolderText
+        detailViewSetup.tip.textColor = .lightGray
+        detailViewSetup.tip.layer.borderWidth = 3
+        detailViewSetup.tip.layer.cornerRadius = 10
+        detailViewSetup.tip.layer.borderColor = UIColor.black.cgColor
         detailViewSetup.direction.addTarget(self, action: #selector(direction), for: .touchUpInside)
         
         PhotoAPIClient.getPhoto(venueId: venue!.id) { (error, data) in
             DispatchQueue.main.async {
                 if let error = error {
+                    self.detailViewSetup.picture.image = UIImage(named: "placeHolder")
                     print(error.errorMessage())
                 } else if let data = data {
                     let prefix = data[0].prefix
@@ -108,4 +116,9 @@ class DetailViewController: UIViewController {
     
 }
 
-
+extension DetailViewController: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        detailViewSetup.tip.text = ""
+        detailViewSetup.tip.textColor = .black
+    }
+}

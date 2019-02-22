@@ -123,9 +123,14 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = searchView.venueTableView.dequeueReusableCell(withIdentifier: "VenueTableList", for: indexPath) as? VenueTableViewCell else {return UITableViewCell()}
         let cellToSet = venues[indexPath.row]
+        cell.venueImage.layer.borderWidth = 3
+        cell.venueImage.layer.cornerRadius = 10
+        cell.venueImage.layer.borderColor = UIColor.black.cgColor
+
         PhotoAPIClient.getPhoto(venueId: cellToSet.id) { (error, data) in
             DispatchQueue.main.async {
                 if let error = error {
+                    cell.venueImage.image = UIImage(named: "placeHolder")
                     print(error.errorMessage())
                 } else if let data = data {
                     let prefix = data[0].prefix
@@ -134,6 +139,7 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
                     ImageHelper.fetchImageFromNetwork(urlString: urlString, completion: { (error, image) in
                         if let error = error {
                           cell.venueImage.image = UIImage(named: "placeHolder")
+                            print(error.errorMessage())
                         } else if let image = image {
                             cell.venueImage.image = image
                         }
