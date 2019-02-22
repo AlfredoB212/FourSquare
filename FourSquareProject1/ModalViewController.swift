@@ -72,7 +72,7 @@ extension ModalViewController: UITableViewDataSource {
 extension ModalViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     var folder = folders[indexPath.row]
-    FolderManager.appening(type: &folder, save: venue, index:indexPath.row)
+    FolderManager.appening(type: &folder, save: venue, at:indexPath.row)
     let folders2 = FolderManager.loadingEntry()
     dump(folders2)
     dismiss(animated: true, completion: nil)

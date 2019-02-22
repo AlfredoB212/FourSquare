@@ -63,7 +63,6 @@ class DetailViewController: UIViewController {
                     let urlString = prefix + "original" + suffix
                     self.picimage = urlString
                     self.detailViewSetup.picture.image = ImageHelper.fetchImageFromCache(urlString: urlString)
-        
                 }
     
             }

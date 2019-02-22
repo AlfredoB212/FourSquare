@@ -80,7 +80,6 @@ class SearchViewController: UIViewController {
     
     
     func getVenues() {
-        
         guard let coordinate = currentLocation?.coordinate else { return }
         let lat = Double(coordinate.latitude)
         let long = Double(coordinate.longitude)
@@ -169,18 +168,14 @@ extension SearchViewController: UISearchBarDelegate {
         if let searchTerm = searchView.venueSearchBar.text {
             query = searchTerm
             resignFirstResponder()
-        }
-        if let locationTerm = searchView.locationSearchBar.text {
+        } else if let locationTerm = searchView.locationSearchBar.text {
             location = locationTerm
             resignFirstResponder()
-            
         }
     }
 }
 
 extension SearchViewController: CLLocationManagerDelegate {
-    
-    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else {
             print("no locations found")
@@ -201,7 +196,10 @@ extension SearchViewController: LocationServiceDelegate {
   
   func didReceiveCoordinate(_ service: LocationService, coordinate: CLLocationCoordinate2D) {
     let currentRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
-    searchView.venueMap.setRegion(currentRegion, animated: true)
+    guard let _ = currentLocation else {
+        searchView.venueMap.setRegion(currentRegion, animated: true)
+        return
+    }
   }
   
 }

@@ -36,31 +36,28 @@ class DirectionViewController: UIViewController {
    
     }
     
-    func updateTheUIInfo(){
-        
+    func updateTheUIInfo() {
         directionLocation.removeAll()
         annotations.removeAll()
         directionCLManager()
         locationManager.delegate = self
         directionLocation.append(venue!.coordinate)
         directionView.directionMap.delegate = self
-        
     }
 
-    func directionCLManager(){
+    func directionCLManager() {
         locationManager = CLLocationManager()
-            locationManager.desiredAccuracy = kCLLocationAccuracyBest
-            locationManager.startUpdatingLocation()
-
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.startUpdatingLocation()
     }
     
-    func makeAnnotationsForDirection(){
+    func makeAnnotationsForDirection() {
         directionView.directionMap.removeAnnotations(annotations)
-            let annotation = MKPointAnnotation()
+        let annotation = MKPointAnnotation()
         annotation.coordinate = venue!.coordinate
         annotation.title = venue!.name
         annotations.append(annotation)
-    directionView.directionMap.addAnnotations(annotations)
+        directionView.directionMap.addAnnotations(annotations)
         
     }
     func direction(location: [CLLocationCoordinate2D]) -> MKDirections.Request {
@@ -74,26 +71,24 @@ class DirectionViewController: UIViewController {
     func directionTrailCalling(request: MKDirections.Request){
         let direction = MKDirections(request: request)
         direction.calculate { (directions, error) in
-            guard let directionFinallyGotten = directions else {return print(error)}
-            for location in directionFinallyGotten.routes{
-                self.directionView.directionMap.addOverlay(location.polyline)
-                self.directionView.directionMap.setVisibleMapRect(location.polyline.boundingMapRect, animated: true)
-            }
-        }
+          guard let directionFinallyGotten = directions else {return print(error)}
+          for location in directionFinallyGotten.routes {
+              self.directionView.directionMap.addOverlay(location.polyline)
+              self.directionView.directionMap.setVisibleMapRect(location.polyline.boundingMapRect, animated: true)
+          }
+      }
         
     }
 }
 
 extension DirectionViewController: CLLocationManagerDelegate {
-    
-    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else {
             print("no locations found")
             return
         }
         currentLocation = location
-        let myRegion = MKCoordinateRegion(center: currentLocation.coordinate, latitudinalMeters: 100, longitudinalMeters: 100)
+        let myRegion = MKCoordinateRegion(center: currentLocation.coordinate, latitudinalMeters:500, longitudinalMeters: 500)
         directionView.directionMap.setRegion(myRegion, animated: true)
         let newAnnotaion = MKPointAnnotation()
         newAnnotaion.coordinate = currentLocation.coordinate
@@ -114,6 +109,5 @@ extension DirectionViewController: MKMapViewDelegate{
         trail.fillColor = UIColor.red
         trail.lineWidth = 2
         return trail
-        
     }
 }
